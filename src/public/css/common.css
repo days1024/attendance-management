@@ -1,0 +1,48 @@
+.header {
+    background: #1e1e1e;
+
+}
+
+.header__inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    padding: 10px 20px;
+
+}
+
+.header__logo {
+    margin-right: 20px;
+}
+
+.form__button-attndance {
+    margin-left: 250px;
+    width: 10%;
+}
+
+
+
+
+.form__button-logout,
+.form__button-show {
+    margin-left: 20px;
+    width: 10%;
+}
+
+.form__button-logout button,
+.form__button-attndance button,
+.form__button-show button,
+.form__button-request button {
+    width: 100%;
+    height: 40px;
+    color: #ffffff;
+    background-color: #1e1e1e;
+    border: none;
+    font-size: 20px;
+}
+
+
+body {
+    background-color: #f0eff2;
+}
