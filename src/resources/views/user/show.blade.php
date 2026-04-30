@@ -8,9 +8,7 @@
 <div class="detail-form__content">
  <form action="/attendance/detail/{{$attendance->id}}" method="POST">
  @csrf
- <div class="detail-form__header">
-     <h1>勤怠詳細</h1>
- </div>
+     <x-page-header title="勤怠詳細" />
  <div class="detail-form__wrapper">
      <div class="detail-form__group">
          <label class="detail-form__label">名前</label>

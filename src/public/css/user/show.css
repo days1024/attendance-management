@@ -5,13 +5,6 @@
 
 }
 
-.detail-form__header {
-    width: 80%;
-    height: 60px;
-    margin: 0 auto;
-    margin-top: 100px;
-    border-left: solid 10px #000;
-}
 
 .detail-form__header h1 {
     width: 100%;

@@ -6,9 +6,7 @@
 
 @section('content')
 <div class="request-form__content">
- <div class="request-form__header">
-     <h1>勤怠一覧</h1>
- </div>
+     <x-page-header title="申請一覧" />
  <div class="show-table">
      <table class="show-table__inner">
          <tr class="show-table__row">

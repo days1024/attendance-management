@@ -27,3 +27,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 });
 
+ Route::get('/admin/attendance/list', [AdminController::class, 'index']);

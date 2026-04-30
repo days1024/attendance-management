@@ -6,18 +6,8 @@
 
 @section('content')
 <div class="show-form__content">
- <div class="show-form__header">
-     <h1>勤怠一覧</h1>
- </div>
- @php
-    $prev = $month->copy()->subMonth()->format('Y-m');
-    $next = $month->copy()->addMonth()->format('Y-m');
- @endphp
- <div class="show-form__link">
-     <a href="{{ url('/attendance/list?month=' . $prev) }}">← 前月</a>
-     <span><i class="fa-regular fa-calendar"></i>{{ $month->format('Y/m') }}</span>
-     <a href="{{ url('/attendance/list?month=' . $next) }}">次月 →</a>
- </div>
+     <x-page-header title="勤怠一覧" />
+     <x-date-nav :date="$month" mode="month" route="/attendance/list" />
  <div class="show-table">
      <table class="show-table__inner">
          <tr class="show-table__row">

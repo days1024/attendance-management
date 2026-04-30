@@ -1,0 +1,38 @@
+.form__header {
+    width: 80%;
+    height: 60px;
+    margin: 0 auto;
+    margin-top: 100px;
+    border-left: solid 10px #000;
+    padding-left: 10px;
+}
+
+.show-form__link {
+    width: 80%;
+    height: 50px;
+    margin: 0 auto;
+    margin-top: 10px;
+    background-color: #fff;
+    padding-top: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.show-form__link a {
+    width: 30%;
+    font-weight: bold;
+    color: #7b7b7b;
+    font-size: 20px;
+    padding-left: 10px;
+}
+
+.show-form__link a:last-child {
+    text-align: right;
+    padding-right: 10px;
+}
+
+.show-form__link span {
+    font-weight: bold;
+    color: #7b7b7b;
+    font-size: 20px;
+}
