@@ -1,0 +1,24 @@
+.attendance-form__content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px 15px;
+
+}
+
+.csv-button {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.csv-button button {
+    width: 200px;
+    height: 60px;
+    margin-top: 30px;
+    background-color: #000;
+    color: #fff;
+    font-size: 30px;
+    font-weight: bold;
+    border-radius: 10px;
+}

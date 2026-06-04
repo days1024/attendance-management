@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.user.app')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/user/create.css') }}">
@@ -7,9 +7,38 @@
 @section('content')
 <div class="create-form__content">
     <div class="create-form__wrapper">
-         <div class="create-form__label">
-             勤務外
-         </div>
+         @php
+             $attendance = $attendance ?? null;
+         @endphp
+             @if(!$attendance || $attendance->status === 'not_started')
+             <div class="create-form__label">
+                 勤務外
+             </div>
+         @endif
+         @php
+             $attendance = $attendance ?? null;
+         @endphp
+             @if($attendance && $attendance->status === 'working')
+             <div class="create-form__label">
+                 出勤中
+             </div>
+         @endif
+         @php
+             $attendance = $attendance ?? null;
+         @endphp
+             @if($attendance && $attendance->status === 'on_break')
+             <div class="create-form__label">
+                 休憩中
+             </div>
+         @endif
+         @php
+             $attendance = $attendance ?? null;
+         @endphp
+             @if($attendance && $attendance->status === 'finished')
+             <div class="create-form__label">
+                 退勤済み
+             </div>
+         @endif
          <div class="create-form__date-group">
              <div class="create-form__day">
                  @php

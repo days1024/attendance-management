@@ -17,6 +17,7 @@ class AttendanceRequest extends Model
         'status',
     ];
 
+    
 
 public function breakTimes()
 {
@@ -35,5 +36,11 @@ public function getStatusLabelAttribute()
         'approved' => '承認済み',
         default => $this->status,
     };
+}
+
+
+public function requestBreakTimes()
+{
+    return $this->hasMany(RequestBreakTime::class);
 }
 }

@@ -8,7 +8,7 @@ switch ($mode) {
         $label = $date->format('Y/m/d');
         $prevText = '前日';
         $nextText = '次日';
-        $query = 'date';
+        $query = 'day';
         break;
 
     case 'month':

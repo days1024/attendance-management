@@ -7,7 +7,16 @@
     max-width: 1400px;
     margin: 0 auto;
     display: flex;
-    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 20px;
+
+}
+
+.header__inner-label {
+    width: 70%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
     padding: 10px 20px;
 
 }
@@ -17,17 +26,20 @@
 }
 
 .form__button-attndance {
-    margin-left: 250px;
+    margin-left: 400px;
     width: 10%;
 }
 
 
+.form__button-request{
+    width: 10%;
+}
 
 
 .form__button-logout,
 .form__button-show {
-    margin-left: 20px;
-    width: 10%;
+    margin-left: 10px;
+    width: 15%;
 }
 
 .form__button-logout button,
@@ -43,6 +55,6 @@
 }
 
 
-body {
+body:not(.auth-page) {
     background-color: #f0eff2;
 }

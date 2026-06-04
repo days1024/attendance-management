@@ -25,7 +25,7 @@ class AttendanceSeeder extends Seeder
 
         while ($count < 90) {
 
-        $date = Carbon::now()->subDays($i);
+        $date = Carbon::now()->subDays($i+1);
 
         // 土日スキップ
         if ($date->isWeekend()) {

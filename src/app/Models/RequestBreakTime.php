@@ -14,6 +14,8 @@ class RequestBreakTime extends Model
         'request_break_end',
     ];
 
+
+
     public function attendanceRequest()
 {
     return $this->belongsTo(AttendanceRequest::class, 'request_id');

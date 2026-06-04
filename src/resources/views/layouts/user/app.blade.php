@@ -14,23 +14,32 @@
   @yield('css')
 </head>
 
-<body>
+<body class="@if(request()->is('login') || request()->is('register')|| request()->is('email')|| request()->is('email/verify')) auth-page @endif">
   <header class="header">
     <div class="header__inner">
       <img class="header__logo" src="{{ asset('img/COACHTECHヘッダーロゴ.png') }}" alt="coachtech">
-     <a href="/attendance" class="form__button-attndance">
-        <button type="submit">勤怠</button>
-     </a>
-     <a href="/attendance/list" class="form__button-show">
+     @if(!request()->is([
+     'login',
+     'register',
+     'email',
+     'email/verify'
+     ]))
+     <div class="header__inner-label">
+       <a href="/attendance" class="form__button-attndance">
+         <button type="submit">勤怠</button>
+       </a>
+       <a href="/attendance/list" class="form__button-show">
         <button type="submit">勤怠一覧</button>
-     </a>
-     <a href="/stamp_correction_request/list" class="form__button-request">
+       </a>
+       <a href="/stamp_correction_request/list" class="form__button-request">
         <button type="submit">申請</button>
-     </a>
-     <form  class="form__button-logout" action="/logout" method="post">
+       </a>
+       <form  class="form__button-logout" action="/logout" method="post">
        @csrf
-       <button type="submit">ログアウト</button>
-     </form>
+         <button type="submit">ログアウト</button>
+       </form>
+       @endif
+     </div>
     </div>
   </header>
 

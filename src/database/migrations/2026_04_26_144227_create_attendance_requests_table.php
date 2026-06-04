@@ -16,13 +16,12 @@ class CreateAttendanceRequestsTable extends Migration
         Schema::create('attendance_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('attendance_id')->constrained()->cascadeOnDelete();
-            $table->time('request_clock_in')->nullable();;
-            $table->time('request_clock_out')->nullable();;
-            $table->string('reason');
+            $table->time('request_clock_in')->nullable();
+            $table->time('request_clock_out')->nullable();
+            $table->text('reason');
             $table->enum('status', ['pending', 'approved'])->default('pending');
             $table->timestamp('created_at')->useCurrent()->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
-            $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
         });
     }
 

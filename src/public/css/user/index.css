@@ -7,41 +7,6 @@
 
 
 
-.show-form__header h1 {
-    width: 100%;
-    padding: 5px 30px;
-}
-
-.show-form__link {
-    width: 80%;
-    height: 50px;
-    margin: 0 auto;
-    margin-top: 10px;
-    background-color: #fff;
-    padding-top: 5px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.show-form__link a {
-    width: 30%;
-    font-weight: bold;
-    color: #7b7b7b;
-    font-size: 20px;
-    padding-left: 10px;
-}
-
-.show-form__link a:last-child {
-    text-align: right;
-    padding-right: 10px;
-}
-
-.show-form__link span {
-    font-weight: bold;
-    color: #7b7b7b;
-    font-size: 20px;
-}
-
 .show-table {
     margin: 30px auto;
     width: 80%;

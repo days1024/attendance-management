@@ -16,31 +16,35 @@ class BreakTimeSeeder extends Seeder
      * @return void
      */
     public function run()
-    {
-        //
-         $attendances = Attendance::all();
+{
+    $attendances = Attendance::all();
 
-        foreach ($attendances as $attendance) {
+    foreach ($attendances as $attendance) {
 
-            if (rand(0, 3) === 0) {
-                continue;
-            }
+        if (rand(0, 3) === 0) {
+            continue;
+        }
 
-            $breakCount = rand(1, 2);
+        $breakCount = rand(1, 2);
 
-            for ($i = 0; $i < $breakCount; $i++) {
+        $currentTime = Carbon::parse(
+            $attendance->work_date->format('Y-m-d') . ' 12:00:00'
+        );
 
-                $start =Carbon::parse($attendance->work_date->format('Y-m-d') . ' 12:00:00')
-                    ->addMinutes(rand(0, 120));
+        for ($i = 0; $i < $breakCount; $i++) {
 
-                $end = (clone $start)->addMinutes(rand(5, 60));
+            $start = (clone $currentTime)->addMinutes(rand(0, 30));
 
-                BreakTime::create([
-                    'attendance_id' => $attendance->id,
-                    'break_start' => $start,
-                    'break_end' => $end,
-                ]);
-            }
+            $end = (clone $start)->addMinutes(rand(5, 60));
+
+            BreakTime::create([
+                'attendance_id' => $attendance->id,
+                'break_start' => $start,
+                'break_end' => $end,
+            ]);
+
+            $currentTime = clone $end;
         }
     }
+}
 }

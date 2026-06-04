@@ -3,54 +3,55 @@
 namespace App\Providers;
 
 use App\Actions\Fortify\CreateNewUser;
-use App\Actions\Fortify\ResetUserPassword;
-use App\Actions\Fortify\UpdateUserPassword;
-use App\Actions\Fortify\UpdateUserProfileInformation;
-use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Cache\RateLimiting\Limit;
 use Laravel\Fortify\Fortify;
-use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
+use Laravel\Fortify\Contracts\LoginResponse;
+use App\Models\User;
+use App\Models\Admin;
 use App\Responses\LogoutResponse;
+use Illuminate\Support\Facades\Auth;
 
 class FortifyServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        //
-        $this->app->instance(
-        LogoutResponseContract::class,
-        new LogoutResponse()
-        );
-    }
 
-    /**
-     * Bootstrap any application services.
-     */
+    public function register(): void
+{
+}
     public function boot(): void
     {
-        Fortify::createUsersUsing(CreateNewUser::class);
-        Fortify::registerView(function () {
-        return view('auth.user.register');
-        });
-
-        Fortify::loginView(function () {
-         return view('auth.user.login');
-        });
-
-        Fortify::verifyEmailView(function () {
-         return view('auth.user.email');
-    });
-
         
 
+        Fortify::createUsersUsing(CreateNewUser::class);
+
+
+        Fortify::loginView(function (Request $request) {
+            if ($request->is('admin/login')) {
+                return view('auth.admin.login');
+            }
+            return view('auth.user.login');
+        });
+
+        Fortify::registerView(fn () => view('auth.user.register'));
+        
+        Fortify::verifyEmailView(fn () => view('auth.user.email'));
+
+        
+        RateLimiter::for('login', function (Request $request) {
+
+            $key = $request->input('type') === 'admin'
+                ? 'admin:' . $request->ip()
+                : 'user:' . $request->ip();
+
+            return Limit::perMinute(1000)->by($key);
+        });
+
         RateLimiter::for('two-factor', function (Request $request) {
-            return Limit::perMinute(10)->by($request->session()->get('login.id'));
+            return Limit::perMinute(1000)->by($request->session()->get('login.id'));
         });
     }
 }

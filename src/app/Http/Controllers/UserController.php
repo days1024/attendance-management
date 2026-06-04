@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\AttendanceRequest as AttendanceRequestForm;
 use App\Models\User;
 use App\Models\Attendance;
 use App\Models\BreakTime;
@@ -43,11 +44,11 @@ class UserController extends Controller
     ));
 }
 
-  public function login(LoginRequest $request) {
+  public function login(LoginRequest $request)
+{
+    $credentials = $request->only('email', 'password');
 
-    $credentials = $request->only('email','password');
-
-    if (!Auth::attempt($credentials)) {
+    if (!Auth::guard('web')->attempt($credentials)) {
         throw ValidationException::withMessages([
             'email' => ['ログイン情報が登録されていません'],
         ]);
@@ -55,17 +56,27 @@ class UserController extends Controller
 
     $request->session()->regenerate();
 
-     if (!Auth::user()->hasVerifiedEmail()) {
+    if (!Auth::guard('web')->user()->hasVerifiedEmail()) {
         return redirect('/email/verify');
     }
 
-    return redirect()->intended('/attendance');
+    return redirect('/attendance');
+}
 
+    public function logout(Request $request)
+{   
+    Auth::guard('web')->logout();
+
+    return redirect('/login');
 }
 
     public function create()
   {
-    return view('user.create');
+    $attendance = Attendance::where('user_id', auth()->id())
+        ->whereDate('work_date', today())
+        ->first();
+        
+    return view('user.create', compact('attendance'));
   }
 
   public function action(Request $request)
@@ -73,8 +84,8 @@ class UserController extends Controller
      $status = $request->status;
 
     $attendance = Attendance::where('user_id', auth()->id())
-        ->whereDate('work_date', now())
-        ->first();
+    ->whereDate('work_date', now()->toDateString())
+    ->first();
 
     switch ($status) {
 
@@ -144,41 +155,64 @@ class UserController extends Controller
   }
 
 
-  public function update(Request $request,$attendance_id)
+  public function update(AttendanceRequestForm $request, $id)
 {
     $req = AttendanceRequest::create([
         'user_id' => auth()->id(),
-        'attendance_id' => $request->attendance_id,
+        'attendance_id' => $id, 
         'request_clock_in' => $request->request_clock_in,
         'request_clock_out' => $request->request_clock_out,
-        'request_break_start'=>$request->request_break_start,
-        'request_break_end'=>$request->request_break_end,
         'reason' => $request->reason,
         'status' => 'pending',
     ]);
 
-    foreach ($request->request_break_start as $index => $start) {
-        RequestBreakTime::create([
-            'attendance_request_id' => $req->id,
-            'request_break_start' => $start,
-            'request_break_end' => $request->request_break_end[$index],
-        ]);
-    }
+    $starts = $request->request_break_start ?? [];
+    $ends   = $request->request_break_end ?? [];
 
-    return redirect()->back();
+    foreach ($starts as $index => $start) {
+        $end = $ends[$index] ?? null;
+        if (empty($start) || empty($end)) {
+        continue;
+        }
+            RequestBreakTime::create([
+                'attendance_request_id' => $req->id,
+                'request_break_start' => $start,
+                'request_break_end' => $end,
+            ]);
+        }
+
+    return redirect()->back()->withInput();
 }
 
 public function request()
-  {
-    $requests = AttendanceRequest::with([
+{
+    $query = AttendanceRequest::with([
         'attendance.user'
-    ])
-    ->whereHas('attendance', function ($q) {
-        $q->where('user_id', auth()->id());
-    })
-    ->latest()
-    ->get();
+    ]);
 
-    return view('user.request', compact('requests'));
-  }
+    if (!Auth::guard('admin')->check()) {
+        $query->whereHas('attendance', function ($q) {
+            $q->where('user_id', auth()->id());
+        });
+    }
+    $tab = request('tab', 'pending');
+
+    if ($tab === 'approved') {
+    $query->where('status', 'approved');
+    } else {
+    $query->where('status', 'pending');
+    }
+
+    $requests = $query
+        ->latest()
+        ->get();
+
+    if (Auth::guard('admin')->check()) {
+        return view('admin.request', compact('requests', 'tab'));
+    }
+
+    return view('user.request', compact('requests','tab'));
+}
+
+
 }
